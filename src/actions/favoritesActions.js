@@ -3,6 +3,7 @@ export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 
 export const toggleFavorites = ()=> {
+    console.log("in toggleFavories of action page");
     return({type: TOGGLE_FAVORITES});
 }
 

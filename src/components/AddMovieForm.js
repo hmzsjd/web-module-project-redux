@@ -8,6 +8,7 @@ const AddMovieForm = (props) => {
     const { push } = useHistory();
 
     const [movie, setMovie] = useState({
+        id: 0,
         title: "",
         director: "",
         genre: "",
@@ -15,17 +16,30 @@ const AddMovieForm = (props) => {
         description:""
     });
 
+
     const handleChange = (e) => {
-        setMovie({
-            ...movie,
-            [e.target.name]: e.target.value
-        });
+        if(e.target.name === "id" || e.target.name === "metascore") {
+            setMovie({
+                ...movie,
+                [e.target.name]: e.target.valueAsNumber
+            });
+
+        } else {
+
+            setMovie({
+                ...movie,
+                [e.target.name]: e.target.value
+            });
+
+        }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (movie) => {
+        props.addMovie(movie);
+        push("/movies");
     }
 
-    const { title, director, genre, metascore, description } = movie;
+    const { id, title, director, genre, metascore, description } = movie;
     return(<div className="col">
         <div className="modal-dialog">
             <div className="modal-content">
@@ -34,7 +48,11 @@ const AddMovieForm = (props) => {
                         <h4 className="modal-title">Add Movie</h4>
                     </div>
 
-                    <div className="modal-body">					
+                    <div className="modal-body">
+                    <div className="form-group">
+                            <label>ID</label>
+                            <input value={id} onChange={handleChange} name="id" type="number" className="form-control"/>
+                        </div>						
                         <div className="form-group">
                             <label>Title</label>
                             <input value={title} onChange={handleChange} name="title" type="text" className="form-control"/>
@@ -58,7 +76,7 @@ const AddMovieForm = (props) => {
                         			
                     </div>
                     <div className="modal-footer">
-                        <input type="submit" className="btn btn-success" value="Add"/>
+                        <input type="submit" className="btn btn-success" value="Add" onClick={() => handleSubmit(movie)}/>
                         <Link to={`/movies`}><input type="button" className="btn btn-default" value="Cancel"/></Link>
                     </div>
                 </form>
@@ -67,4 +85,8 @@ const AddMovieForm = (props) => {
     </div>);
 }
 
-export default AddMovieForm;
+const mapActionsToProps = {
+    addMovie
+}
+
+export default connect(null, mapActionsToProps)(AddMovieForm);
